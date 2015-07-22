@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.containsString;
 public class NewConversationActivityActions {
 
   public static void filterNameOrNumber(String nameOrNumber) throws Exception {
-    EspressoUtil.replaceTextAndCloseKeyboard(onView(withId(R.id.filter)), nameOrNumber);
+    EspressoUtil.replaceTextAndCloseKeyboard(onView(withId(R.id.text)), nameOrNumber);
   }
 
   @SuppressWarnings("unchecked")

@@ -24,8 +24,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.smssecure.smssecure.components.DefaultSmsReminder;
-import org.smssecure.smssecure.components.ExpiredBuildReminder;
-import org.smssecure.smssecure.components.PushRegistrationReminder;
 import org.smssecure.smssecure.components.SystemSmsImportReminder;
 import org.smssecure.smssecure.util.SMSSecurePreferences;
 
@@ -76,18 +74,12 @@ public class ConversationListActivityTest extends SMSSecureEspressoTestCase<Conv
     Integer reminderTitleResId = null;
     Integer reminderTextResId  = null;
 
-    if (ExpiredBuildReminder.isEligible(getContext())) {
-      reminderTitleResId = R.string.reminder_header_expired_build;
-      reminderTextResId  = R.string.reminder_header_expired_build_details;
-    } else if (DefaultSmsReminder.isEligible(getContext())) {
+    if (DefaultSmsReminder.isEligible(getContext())) {
       reminderTitleResId = R.string.reminder_header_sms_default_title;
       reminderTextResId  = R.string.reminder_header_sms_default_text;
     } else if (SystemSmsImportReminder.isEligible(getContext())) {
       reminderTitleResId = R.string.reminder_header_sms_import_title;
       reminderTextResId  = R.string.reminder_header_sms_import_text;
-    } else if (PushRegistrationReminder.isEligible(getContext())) {
-      reminderTitleResId = R.string.reminder_header_push_title;
-      reminderTextResId  = R.string.reminder_header_push_text;
     } else {
       reminderVisible = false;
     }
@@ -112,7 +104,6 @@ public class ConversationListActivityTest extends SMSSecureEspressoTestCase<Conv
     loadAndCheckState();
 
     int expectedReminders = 0;
-    if (ExpiredBuildReminder.isEligible(getContext()))    expectedReminders++;
     if (DefaultSmsReminder.isEligible(getContext()))      expectedReminders++;
     if (SystemSmsImportReminder.isEligible(getContext())) expectedReminders++;
 
@@ -130,10 +121,6 @@ public class ConversationListActivityTest extends SMSSecureEspressoTestCase<Conv
       waitOn(ApplicationPreferencesActivity.class);
       pressBack();
       waitOn(ConversationListActivity.class);
-    }
-
-    if (checkReminderIsDisplayed() && !PushRegistrationReminder.isEligible(getContext())) {
-      throw new IllegalStateException("only expected to see " + expectedReminders + " reminders");
     }
   }
 

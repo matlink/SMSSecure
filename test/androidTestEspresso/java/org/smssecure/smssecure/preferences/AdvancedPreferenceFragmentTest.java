@@ -23,8 +23,6 @@ import org.smssecure.smssecure.ApplicationPreferencesActivity;
 import org.smssecure.smssecure.ConversationListActivity;
 import org.smssecure.smssecure.LogSubmitActivity;
 import org.smssecure.smssecure.R;
-import org.smssecure.smssecure.RegistrationActivity;
-import org.smssecure.smssecure.contacts.ContactIdentityManager;
 import org.smssecure.smssecure.ApplicationPreferencesActivityActions;
 import org.smssecure.smssecure.ConversationListActivityActions;
 import org.smssecure.smssecure.SMSSecureEspressoTestCase;
@@ -55,12 +53,6 @@ public class AdvancedPreferenceFragmentTest extends SMSSecureEspressoTestCase<Co
           .check(matches(isDisplayed()));
     onData(Matchers.<Object>allOf(withKey("pref_submit_debug_logs")))
           .check(matches(isDisplayed()));
-
-    ContactIdentityManager identity = ContactIdentityManager.getInstance(getContext());
-    if (!identity.isSelfIdentityAutoDetected()) {
-      onData(Matchers.<Object>allOf(withKey("pref_choose_identity")))
-            .check(matches(isDisplayed()));
-    }
   }
 
   private void checkViewsMatchPreferences() throws Exception {
@@ -90,16 +82,6 @@ public class AdvancedPreferenceFragmentTest extends SMSSecureEspressoTestCase<Co
     loadActivity(ConversationListActivity.class, STATE_REGISTRATION_SKIPPED);
     clickAdvancedSettingAndCheckState();
     AdvancedPreferenceFragmentActions.clickSMSSecureMessages();
-    waitOn(RegistrationActivity.class);
-  }
-
-  public void testDisableSMSSecureMessages() throws Exception {
-    loadActivity(ConversationListActivity.class, STATE_REGISTERED);
-    clickAdvancedSettingAndCheckState();
-    AdvancedPreferenceFragmentActions.clickSMSSecureMessages();
-    onView(withText(R.string.ApplicationPreferencesActivity_disable_textsecure_messages))
-          .check(matches(isDisplayed()));
-    onView(withText(android.R.string.cancel)).perform(click());
   }
 
   public void testSubmitDebugLog() throws Exception {

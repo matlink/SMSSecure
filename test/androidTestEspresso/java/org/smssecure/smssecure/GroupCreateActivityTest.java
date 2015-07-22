@@ -37,20 +37,4 @@ public class GroupCreateActivityTest extends SMSSecureEspressoTestCase<Conversat
     EspressoUtil.waitOn(GroupCreateActivity.class);
   }
 
-  public void testLayoutWithPush() throws Exception {
-    loadActivity(ConversationListActivity.class, STATE_REGISTERED);
-    clickNewGroup();
-
-    onView(ViewMatchers.withId(R.id.push_disabled)).check(matches(not(isDisplayed())));
-    onView(withId(R.id.push_disabled_reason)).check(matches(not(isDisplayed())));
-  }
-
-  public void testLayoutWithoutPush() throws Exception {
-    loadActivity(ConversationListActivity.class, STATE_REGISTRATION_SKIPPED);
-    clickNewGroup();
-
-    onView(ViewMatchers.withId(R.id.push_disabled)).check(matches(isDisplayed()));
-    onView(withId(R.id.push_disabled_reason)).check(matches(isDisplayed()));
-  }
-
 }

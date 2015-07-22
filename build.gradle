@@ -232,27 +232,24 @@ if (propFile.canRead()){
     android.buildTypes.release.signingConfig = null
 }
 
-if (project.hasProperty('espresso') && System.console() != null) {
+if (project.hasProperty('espresso')) {
     println "______________________WARNING_______________________"
     println "ALL YOUR CONTACTS WILL BE DELETED IN THE PROCESS"
-    println "OF RUNNING THESE TESTS, TYPE 'delete all my contacts'"
-    println "TO CONTINUE"
+    println "OF RUNNING THESE TESTS. PRESS CTRL+C **NOW** TO"
+    println "CANCEL THE CURRENT TASK."
     println "----------------------------------------------------"
 
-    def input = System.console().readLine(':')
-    if (input == 'delete all my contacts') {
-        android.productFlavors {
-            base {}
-            espresso {
-                testInstrumentationRunner "org.smssecure.smssecure.SMSSecureWakingTestRunner"
-            }
+    android.productFlavors {
+        base {}
+        espresso {
+            testInstrumentationRunner "org.smssecure.smssecure.SMSSecureWakingTestRunner"
         }
-        android.sourceSets.espresso {
-            manifest.srcFile 'test/espresso/AndroidManifest.xml'
-        }
-        android.sourceSets.androidTestEspresso {
-            java.srcDirs = ['test/androidTestEspresso/java']
-            res.srcDirs  = ['test/androidTestEspresso/res']
-        }
+    }
+    android.sourceSets.espresso {
+        manifest.srcFile 'test/espresso/AndroidManifest.xml'
+    }
+    android.sourceSets.androidTestEspresso {
+        java.srcDirs = ['test/androidTestEspresso/java']
+        res.srcDirs  = ['test/androidTestEspresso/res']
     }
 }

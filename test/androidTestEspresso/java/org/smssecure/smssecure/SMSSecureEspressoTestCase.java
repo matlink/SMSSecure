@@ -75,40 +75,8 @@ public class SMSSecureEspressoTestCase<T extends Activity> extends ActivityInstr
   }
 
   protected void loadActivity(Class<? extends Activity> clazz, int state) throws Exception {
-    switch (state) {
-      case STATE_REGISTRATION_SKIPPED:
-        SMSSecurePreferences.setPromptedPushRegistration(getContext(), true);
-        getActivity();
-        break;
-
-      case STATE_REGISTERED:
-        getActivity();
-        EspressoUtil.waitOn(RegistrationActivity.class);
-        RegistrationActivityActions.enterPstnNumber(pstnCountry, pstnNumber);
-        sleepThroughRegistrationLimit();
-        RegistrationActivityActions.clickRegister();
-        RegistrationActivityActions.clickContinue();
-        EspressoUtil.waitOn(RegistrationProgressActivity.class);
-        RegistrationActivityActions.sleepTillRegistrationConnected();
-        RegistrationBypassUtil.receiveVerificationSms(getContext(), pstnCountry, pstnNumber, verificationCode);
-        break;
-
-      default:
-        getActivity();
-    }
-
+    getActivity();
     EspressoUtil.waitOn(clazz);
-  }
-
-  private void initMockPstnState() throws Exception {
-    final Context context    = getInstrumentation().getContext();
-    final String  pstnString = RegistrationBypassUtil.getPstnStringForDevice(context);
-
-    pstnCountry      = pstnString.split(":")[0].replace("+", "");
-    pstnNumber       = pstnString.split(":")[1];
-    verificationCode = RegistrationBypassUtil.getVerificationCodeForPstnString(context, pstnString);
-
-    Log.d(TAG, "using pstn string of " + pstnString);
   }
 
   @Override
@@ -116,9 +84,6 @@ public class SMSSecureEspressoTestCase<T extends Activity> extends ActivityInstr
     System.setProperty("dexmaker.dexcache", getContext().getCacheDir().getPath());
     super.setUp();
 
-    if (pstnCountry == null || pstnNumber == null || verificationCode == null) {
-      initMockPstnState();
-    }
     initBaseState();
   }
 
